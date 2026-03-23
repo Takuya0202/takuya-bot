@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { Client, GatewayIntentBits } from "discord.js";
+import { ApplicationCommandOptionType, Client, GatewayIntentBits } from "discord.js";
 const client = new Client({
     intents : [
         GatewayIntentBits.Guilds,
@@ -8,6 +8,23 @@ const client = new Client({
     ]
 });
 
+// slashコマンド登録
+client.on("ready" , async () => {
+    const data = [{
+        name : "clip",
+        description : "動画または画像をクリップします。クリップされた動画または画像は定期的にチャンネル内に投稿されます。",
+        options : [
+            {
+                name : "file",
+                description : "クリップするファイル",
+                type : ApplicationCommandOptionType.Attachment, // 11
+                required : true
+            }
+        ]
+    }];
+    await client.application.commands.set(data)
+    console.log("slashコマンド登録完了");
+})
 // イベント一覧
 // messageCreateはサーバー内でメッセージが送信された時に発火するイベント
 client.on("messageCreate" , (message) => {
