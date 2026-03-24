@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { ApplicationCommandOptionType, Client, GatewayIntentBits } from "discord.js";
 import { clip } from './commands/clip.js';
+import { share } from './commands/share.js';
 const client = new Client({
     intents : [
         GatewayIntentBits.Guilds,
@@ -29,12 +30,10 @@ client.on("ready" , async () => {
 
 
 // イベント一覧
-// slashコマンド
 client.on("interactionCreate" , async (interaction) => await clip(interaction));
-// messageCreateはサーバー内でメッセージが送信された時に発火するイベント
 client.on("messageCreate" , (message) => {
     if (message.author.bot) return; // ボットのメッセージは無視
-    message.reply("テスト");
+    share(message);
 } )
 
 const token = process.env.DISCORD_TOKEN;
