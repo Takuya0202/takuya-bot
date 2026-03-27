@@ -2,6 +2,7 @@ import 'dotenv/config';
 import { ApplicationCommandOptionType, Client, GatewayIntentBits } from "discord.js";
 import { clip } from './commands/clip.js';
 import { share } from './commands/share.js';
+import { explain } from './commands/explain.js';
 const client = new Client({
     intents : [
         GatewayIntentBits.Guilds,
@@ -11,7 +12,7 @@ const client = new Client({
 });
 
 // slashコマンド登録
-client.on("ready" , async () => {
+client.on("clientReady" , async () => {
     const data = [{
         name : "clip",
         description : "動画または画像をクリップします。クリップされた動画または画像は定期的にチャンネル内に投稿されます。",
@@ -33,6 +34,9 @@ client.on("ready" , async () => {
 client.on("interactionCreate" , async (interaction) => await clip(interaction));
 client.on("messageCreate" , (message) => {
     if (message.author.bot) return; // ボットのメッセージは無視
+    if (message.mentions.has(client.user)) {
+        explain(message);
+    }
     share(message);
 } )
 
