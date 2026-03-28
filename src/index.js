@@ -3,6 +3,7 @@ import { ApplicationCommandOptionType, Client, GatewayIntentBits } from "discord
 import { clip } from './commands/clip.js';
 import { share } from './commands/share.js';
 import { explain } from './commands/explain.js';
+import { recommend } from './commands/recommend.js';
 const client = new Client({
     intents : [
         GatewayIntentBits.Guilds,
@@ -24,15 +25,22 @@ client.on("clientReady" , async () => {
                 required : true
             }
         ]
-    }];
-    await client.application.commands.set(data)
+    },
+    {
+        name : "recommend",
+        description : "おすすめ動画を紹介します。",
+    }
+];
+    // dev時のみギルドでコマンドを登録
+    const serverId = process.env.SERVER_ID;
+    await client.application.commands.set(data , serverId)
     console.log("slashコマンド登録完了");
 });
-
 
 // スラッシュコマンド一覧
 const commands = [
     { name: "clip", handler: clip },
+    { name : "recommend", handler: recommend },
 ];
 
 // イベント一覧
