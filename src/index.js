@@ -30,8 +30,17 @@ client.on("clientReady" , async () => {
 });
 
 
+// スラッシュコマンド一覧
+const commands = [
+    { name: "clip", handler: clip },
+];
+
 // イベント一覧
-client.on("interactionCreate" , async (interaction) => await clip(interaction));
+client.on("interactionCreate", async (interaction) => {
+    if (!interaction.isChatInputCommand()) return;
+    const command = commands.find(c => c.name === interaction.commandName);
+    if (command) await command.handler(interaction);
+});
 client.on("messageCreate" , (message) => {
     if (message.author.bot) return; // ボットのメッセージは無視
     if (message.mentions.has(client.user)) {
